@@ -1,8 +1,12 @@
 package getting;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.PrintStream;
+import java.io.Writer;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -17,15 +21,26 @@ import fr.ratp.wsiv.xsd.*;
 
 public class Stops {
 	
-	public static void main(String []args) {
+	public static void main(String []args) throws IOException {
 		ObjectFactory of = new ObjectFactory();
 		Wsiv ws = new Wsiv();
-		WsivPortType wpt = ws.getWsivSOAP11PortHttp();
-		
-		Line line =of.createLine();
-		//line.setId(of.createLineId("RB"));
-	
-		get();
+
+		//IMPORTANT INFO!
+		/**
+		 * writeInFile: every call will do (NumberOfStations) times of requests
+		 * @param minutes: how long to take for one get info
+		 * @param outFileName: will output two file: info and perturbationInfo
+		 * @param linename
+		 * @param direction A/R/*
+		 * OutputFormat:LineInfo 
+		 * I forgot the order of output of nextTime, maybe it starts with direction='A'?
+		 * StationName +'\t' +TimeRightNow+'\t' +numberOfMissions+'\t'+aLotOfNextTimeSeperateBy'\t'.. +
+		 * ","+aLotOfStationMessageSeperatetedBy'\t'
+		 * 
+		 * OutputFormat:LineInfoPerturbations
+		 * StationName+'\t'+Time+'\t'+NumberofPerturbation+'\t'+alotofPerturbationLevel+'\t'+alotofPerturbationMessage
+		 */
+		writeInFile(5,"LineInfo","RB","*");
 		/*
 		Station station =of.createStation();
 		station.setLine(of.createStationLine(line));
@@ -85,12 +100,22 @@ public class Stops {
 		return stationsRB;
 		
 	}
-	
+	/**
+	 * will request for one time 
+	 * @param station
+	 * @param dir
+	 * @param of
+	 * @param wpt
+	 * @return
+	 */
 	public static List < Mission> getAllMission(Station station, String dir,ObjectFactory of,WsivPortType wpt){
 		Direction direction =of.createDirection();
 		direction.setLine(of.createDirectionLine(station.getLine().getValue()));
 		direction.setSens(of.createDirectionSens(dir));
-		return wpt.getMissionsNext(station, direction, null, null).getMissions();
+		
+		List < Mission> missions=wpt.getMissionsNext(station, direction, null, null).getMissions();
+		System.out.println(missions.size());
+		return missions;
 	}
 	
 	public static String InfoLine(Mission mission) {
@@ -110,6 +135,112 @@ public class Stops {
 	}
 	
 	
+	public static void writeInFile(int min,String fileName,String lineName,String dir) throws IOException {
+		ObjectFactory of = new ObjectFactory();
+		Wsiv ws = new Wsiv();
+		WsivPortType wpt = ws.getWsivSOAP11PortHttp();
+		final File logFile=new File (fileName);
+		final File logFilePerturbation=new File (fileName+"Perturbation");
+		
+		if(!logFile.exists()) {
+			logFile.createNewFile();
+		}
+		if(!logFilePerturbation.exists()) {
+			logFilePerturbation.createNewFile();
+		}
+		//One Request
+		List<Station> stations =getAllStations(lineName, of, wpt);
+		ScheduledExecutorService exec =  Executors.newScheduledThreadPool(1);
+		
+		exec.scheduleWithFixedDelay(new Runnable(){
+            public void run() {
+
+            	
+                try {
+                	long callTime=0;
+                    @SuppressWarnings("resource")
+					Writer txtWriter = new FileWriter(logFile,true);
+                    @SuppressWarnings("resource")
+					Writer txtWriter1 = new FileWriter(logFilePerturbation,true);
+                    //Date creation
+                    Date date=new Date();
+					SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmm");
+					String now = dateFormat.format( date );
+    				
+    				
+    				for(Station station: stations) {
+    					
+    					//System.out.println(station.getLine().getValue().getReseau().getValue().getId().getValue());
+    					Direction direction =of.createDirection();
+    					direction.setLine(of.createDirectionLine(station.getLine().getValue()));
+    					direction.setSens(of.createDirectionSens(dir));
+    					callTime++;
+    					WrMissions wrmissions=wpt.getMissionsNext(station, direction, null, null);
+    					List < Mission> missions = wrmissions.getMissions();
+    					//FORMAT OF OUTPUT
+    					txtWriter.write(station.getName().getValue()+'\t' +now +'\t'+missions.size()+'\t');
+    					txtWriter.flush();
+    					txtWriter1.write(station.getName().getValue()+'\t' +now +'\t'+wrmissions.getPerturbations().size()+'\t');
+    					txtWriter1.flush();
+    					
+    					for(Mission m: missions) {
+    						
+    						List <String> nextTime=m.getStationsDates();
+    						
+    						for(String i: nextTime) {
+    							txtWriter.write(i+'\t');
+    							txtWriter.flush();
+    						}
+
+    					}
+    					txtWriter.write( ",");
+    					txtWriter.flush();
+    					for(Mission m: missions) {
+    						
+    						List <String> nextMessage=m.getStationsMessages();
+    						for(String i: nextMessage) {
+    							txtWriter.write(i+'\t');
+    							txtWriter.flush();
+    						}
+    					}
+    					
+    					try {
+    						List<Perturbation> perturbations=wrmissions.getPerturbations();
+    
+    						for(Perturbation p:perturbations ) {
+    							
+    							txtWriter1.write(p.getLevel().getValue()+'\t');
+    							txtWriter1.flush();
+    						}
+    						for(Perturbation p:perturbations ) {
+    							txtWriter1.write(p.getMessage().getValue().getText().getValue()+'\t');
+    							txtWriter1.flush();
+    						}
+    						
+    					}catch(Exception e) {}
+    					txtWriter.write('\n');
+    					txtWriter.flush();
+    					txtWriter1.write('\n');
+    					txtWriter1.flush();
+    					
+    					
+    				}
+    				
+    				
+    				
+                    
+                    
+                    System.out.println("Time: "+now+'\t' +"Line: "+lineName+ '\t'+"callTimes: "+callTime);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }, 0, min, TimeUnit.MINUTES);
+		
+		
+		
+	}
+	
 	public static void get() {
 		int getTime=0;
 		ObjectFactory of = new ObjectFactory();
@@ -124,8 +255,8 @@ public class Stops {
 		
 		try {
 			PrintStream out =new PrintStream (new FileOutputStream("allStation.txt"));
-			Runnable runnable =new Runnable() {
-				public void run() {
+
+
 			
 			for(Station s : stationsRB) {
 				
@@ -161,10 +292,9 @@ public class Stops {
 			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
 			String now = dateFormat.format( date );
 			System.out.println(now);
-				}};
+			
 				
-		    ScheduledExecutorService service = Executors.newSingleThreadScheduledExecutor();  	
-		    service.scheduleAtFixedRate(runnable, 0, 10, TimeUnit.SECONDS);  
+	
 		    out.close();	
 		    
 		}catch (FileNotFoundException e) {
