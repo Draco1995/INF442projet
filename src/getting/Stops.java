@@ -39,8 +39,8 @@ public class Stops {
 		 * OutputFormat:LineInfoPerturbations
 		 * StationName+'\t'+Time+'\t'+NumberofPerturbation+'\t'+alotofPerturbationLevel+'\t'+alotofPerturbationMessage
 		 */
-		writeInFile(5,"LineInfoRB","RB","*");
-		writeInFile(5,"LineInfo9106","RB","*");
+		writeInFile(1,"LineInfoRB","RB","*");
+		writeInFile(1,"LineInfo9106","393101","*");
 		/*
 		Station station =of.createStation();
 		station.setLine(of.createStationLine(line));
@@ -175,7 +175,7 @@ public class Stops {
     					direction.setLine(of.createDirectionLine(station.getLine().getValue()));
     					direction.setSens(of.createDirectionSens(dir));
     					callTime++;
-    					WrMissions wrmissions=wpt.getMissionsNext(station, direction, null, null);
+    					WrMissions wrmissions=wpt.getMissionsNext(station, direction, null, 100);
     					List < Mission> missions = wrmissions.getMissions();
     					//FORMAT OF OUTPUT
     					txtWriter.write(station.getName().getValue()+'\t' +now +'\t'+missions.size()+'\t');
@@ -193,8 +193,8 @@ public class Stops {
     						}
 
     					}
-    					txtWriter.write( ",");
-    					txtWriter.flush();
+    					//txtWriter.write( ",");
+    					//txtWriter.flush();
     					for(Mission m: missions) {
     						
     						List <String> nextMessage=m.getStationsMessages();
@@ -235,7 +235,7 @@ public class Stops {
                     throw new RuntimeException(e);
                 }
             }
-        }, 0, min, TimeUnit.SECONDS);
+        }, 0, min, TimeUnit.MINUTES);
 		
 		
 		
