@@ -14,11 +14,12 @@ public class getAllLines {
 	List<Line> tramway=new ArrayList<Line>();
 	List<Line> bus=new ArrayList<Line>();
 	List<Line> sncf=new ArrayList<Line>();
-	
+	List<Line> all;
 	public getAllLines(WsivPortType wpt,ObjectFactory of){
 		
 		Line line=of.createLine();
-		List<Line> lines=wpt.getLines(line);
+		all=wpt.getLines(line);
+		/*
 		for(Line l:lines) {
 			if(l.getReseau().getValue().getName().getValue().contains("Bus")) {
 				this.bus.add(l);
@@ -34,7 +35,7 @@ public class getAllLines {
 				this.metro.add(l);
 			}
 			
-		}
+		}*/
 		
 	}
 }
