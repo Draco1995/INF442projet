@@ -235,7 +235,7 @@ public class Stops {
                     throw new RuntimeException(e);
                 }
             }
-        }, 0, min, TimeUnit.MINUTES);
+        }, 0, min, TimeUnit.SECONDS);
 		
 		
 		
