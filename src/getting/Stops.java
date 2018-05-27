@@ -22,8 +22,7 @@ import fr.ratp.wsiv.xsd.*;
 public class Stops {
 	
 	public static void main(String []args) throws IOException {
-		ObjectFactory of = new ObjectFactory();
-		Wsiv ws = new Wsiv();
+
 
 		//IMPORTANT INFO!
 		/**
@@ -40,7 +39,8 @@ public class Stops {
 		 * OutputFormat:LineInfoPerturbations
 		 * StationName+'\t'+Time+'\t'+NumberofPerturbation+'\t'+alotofPerturbationLevel+'\t'+alotofPerturbationMessage
 		 */
-		writeInFile(5,"LineInfo","RB","*");
+		writeInFile(5,"LineInfoRB","RB","*");
+		writeInFile(5,"LineInfo9106","RB","*");
 		/*
 		Station station =of.createStation();
 		station.setLine(of.createStationLine(line));
@@ -235,7 +235,7 @@ public class Stops {
                     throw new RuntimeException(e);
                 }
             }
-        }, 0, min, TimeUnit.MINUTES);
+        }, 0, min, TimeUnit.SECONDS);
 		
 		
 		
