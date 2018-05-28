@@ -39,8 +39,8 @@ public class Stops {
 		 * OutputFormat:LineInfoPerturbations
 		 * StationName+'\t'+Time+'\t'+NumberofPerturbation+'\t'+alotofPerturbationLevel+'\t'+alotofPerturbationMessage
 		 */
-		writeInFile(1,"LineInfoRB","RB","*");
-		writeInFile(1,"LineInfo9106","393101","*");
+		writeInFile(1,"LineInfoRBFinal0529","RB","*");
+		writeInFile(1,"LineInfo9106Final0529","393101","*");
 		/*
 		Station station =of.createStation();
 		station.setLine(of.createStationLine(line));
@@ -182,11 +182,26 @@ public class Stops {
     					txtWriter.flush();
     					txtWriter1.write(station.getName().getValue()+'\t' +now +'\t'+wrmissions.getPerturbations().size()+'\t');
     					txtWriter1.flush();
+    					int A=0;
+    					int R=0;
+    					for(Mission m: missions) {
+    						String directionMission=m.getDirection().getValue().getSens().getValue();
+    						if(directionMission.equals("A")) {
+    							A++;
+    						}
+    						if(directionMission.equals("R")) {
+    							R++;
+    						}
+    					}
+    					txtWriter.write("A"+'\t'+A+'\t'+"R"+'\t'+R+'\t');
+    					txtWriter.flush();
     					
     					for(Mission m: missions) {
     						
     						List <String> nextTime=m.getStationsDates();
-    						
+    						//String directionMission=m.getDirection().getValue().getSens().getValue();
+    						//txtWriter.write(directionMission+'\t');
+							//txtWriter.flush();
     						for(String i: nextTime) {
     							txtWriter.write(i+'\t');
     							txtWriter.flush();
@@ -235,7 +250,7 @@ public class Stops {
                     throw new RuntimeException(e);
                 }
             }
-        }, 0, min, TimeUnit.SECONDS);
+        }, 0, min, TimeUnit.MINUTES);
 		
 		
 		
