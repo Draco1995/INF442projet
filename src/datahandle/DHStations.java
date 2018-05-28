@@ -7,11 +7,11 @@ public class DHStations {
 	DHStations(){
 		
 	}
-	public void push(String name, String time1,String time2) {
+	public void push(String name, String time1,String time2,String actualTime) {
 		if(map.containsKey(name)) {
-			map.get(name).push(time1,time2);
+			map.get(name).push(time1,time2,actualTime);
 		}else {
-			map.put(name, new DHStation(name,time1,time2));
+			map.put(name, new DHStation(name,time1,time2,actualTime));
 		}
 	}
 	

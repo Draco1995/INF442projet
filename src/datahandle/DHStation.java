@@ -11,9 +11,10 @@ public class DHStation {
 	List<String> arriveTime1 = new LinkedList<String>();
 	List<String> arriveTime2 = new LinkedList<String>();
 	private Date time1,time2;
-	DHStation(String name,String time1,String time2){
+	private String actualTime;
+	DHStation(String name,String time1,String time2,String actualTime){
 		this.name = name;
-		
+		this.actualTime = actualTime;
 		if(time1 == null) {
 			this.time1 = null;
 		}else {
@@ -35,7 +36,7 @@ public class DHStation {
 			}
 		}
 	}
-	public void push(String time1,String time2) {
+	public void push(String time1,String time2,String actualTime) {
 		try {
 			this.time1 = phrase(time1,this.time1,arriveTime1);
 			this.time2 = phrase(time2,this.time2,arriveTime2);
@@ -43,6 +44,7 @@ public class DHStation {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		this.actualTime = actualTime;
 		
 	}
 	
@@ -62,7 +64,9 @@ public class DHStation {
 		long difference = aTime.getTime()-before.getTime();
 		long second = difference/(1000);
 		if(second>70) {
-			arriveTime.add(format.format(before));
+			if((format.parse(this.actualTime).getTime()-before.getTime())<120*1000)
+				arriveTime.add(format.format(before));
+			
 		}
 		return aTime;
 	}

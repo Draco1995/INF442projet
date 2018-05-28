@@ -36,17 +36,17 @@ public class GenerateRealTime {
 	    }
 	 public static void handleLine(String line) {
 		 String[] para = line.split("\t");
-		 int num = Integer.parseInt(para[2]);
+		 int numA = Integer.parseInt(para[4]);
+		 int numR = Integer.parseInt(para[6]);
+	//	 if(para[0].equals("Lozere")) {
+		//	 System.out.println(para[1]+" "+para[3]+" "+para[4]+" "+para[5]+" "+para[6]);
+		 //}
 		 //TODO
-		 if(num==0) {
-			 dhs.push(para[0], null, null);
-		 }else {
-			 dhs.push(para[0], para[3], para[3+num/2]);
-		 }
+		 dhs.push(para[0], numA==0 ? null : para[7], numR==0 ? null : para[7+numA], para[1]);
 		 
 	 }
 	 public static void main(String[] args) {
-		 readFileByLines("LineInfoRB");
+		 readFileByLines("LineInfoRBFinal.txt");
 		 dhs.print();
 	 }
 }
