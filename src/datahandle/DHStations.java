@@ -7,11 +7,11 @@ public class DHStations {
 	DHStations(){
 		
 	}
-	public void push(String name, String time1,String time2,String actualTime) {
-		if(map.containsKey(name)) {
-			map.get(name).push(time1,time2,actualTime);
+	public void push(String[] para) {
+		if(map.containsKey(para[0])) {
+			map.get(para[0]).push(para);
 		}else {
-			map.put(name, new DHStation(name,time1,time2,actualTime));
+			map.put(para[0], new DHStation(para));
 		}
 	}
 	
@@ -19,6 +19,22 @@ public class DHStations {
 		for (HashMap.Entry<String, DHStation> entry : map.entrySet()) {  
 			  
 		    System.out.println(entry.getKey() + ":" + entry.getValue());  
+		  
+		}  
+	}
+	
+	public void printPassTrain() {
+		for (HashMap.Entry<String, DHStation> entry : map.entrySet()) {  
+			  
+		    System.out.println(entry.getKey() + ":" + entry.getValue().getTrueNumbers());  
+		  
+		}  
+	}
+	
+	public void prune() {
+		for (HashMap.Entry<String, DHStation> entry : map.entrySet()) {  
+			  
+		    entry.getValue().prune();
 		  
 		}  
 	}

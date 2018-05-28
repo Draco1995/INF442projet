@@ -36,17 +36,21 @@ public class GenerateRealTime {
 	    }
 	 public static void handleLine(String line) {
 		 String[] para = line.split("\t");
-		 int numA = Integer.parseInt(para[4]);
-		 int numR = Integer.parseInt(para[6]);
-	//	 if(para[0].equals("Lozere")) {
-		//	 System.out.println(para[1]+" "+para[3]+" "+para[4]+" "+para[5]+" "+para[6]);
-		 //}
-		 //TODO
-		 dhs.push(para[0], numA==0 ? null : para[7], numR==0 ? null : para[7+numA], para[1]);
+		 int flag = 1;
+		 if(para[1].equals("201805272000")&&para[0].equals("Chatelet") ) {
+			 flag = 0;
+		 }
+		 if(para[0].equals("Chatelet")){
+			 System.out.println(line);
+		 }
+		 dhs.push(para);
 		 
 	 }
 	 public static void main(String[] args) {
 		 readFileByLines("LineInfoRBFinal.txt");
+		 dhs.print();
+		 dhs.printPassTrain();
+		 dhs.prune();
 		 dhs.print();
 	 }
 }
