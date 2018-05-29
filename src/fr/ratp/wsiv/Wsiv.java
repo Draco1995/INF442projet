@@ -17,7 +17,7 @@ import javax.xml.ws.WebServiceFeature;
  * Generated source version: 2.2
  * 
  */
-@WebServiceClient(name = "Wsiv", targetNamespace = "http://wsiv.ratp.fr", wsdlLocation = "file:/C:/Users/MSI/Desktop/ratp-wsiv-opendata/wsiv.wsdl")
+@WebServiceClient(name = "Wsiv", targetNamespace = "http://wsiv.ratp.fr", wsdlLocation = "file:Wsiv.wsdl")
 public class Wsiv
     extends Service
 {
@@ -30,7 +30,7 @@ public class Wsiv
         URL url = null;
         WebServiceException e = null;
         try {
-            url = new URL("file:/C:/Users/MSI/Desktop/ratp-wsiv-opendata/wsiv.wsdl");
+            url = new URL("file:Wsiv.wsdl");
         } catch (MalformedURLException ex) {
             e = new WebServiceException(ex);
         }
