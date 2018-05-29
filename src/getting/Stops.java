@@ -39,8 +39,8 @@ public class Stops {
 		 * OutputFormat:LineInfoPerturbations
 		 * StationName+'\t'+Time+'\t'+NumberofPerturbation+'\t'+alotofPerturbationLevel+'\t'+alotofPerturbationMessage
 		 */
-		writeInFile(1,"LineInfoRBFinal0529","RB","*");
-		writeInFile(1,"LineInfo9106Final0529","393101","*");
+		writeInFile(1,"LineInfoRBFinal052911","RB","*");
+		writeInFile(1,"LineInfo9106Final052911","393101","*");
 		/*
 		Station station =of.createStation();
 		station.setLine(of.createStationLine(line));
