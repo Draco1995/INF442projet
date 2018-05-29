@@ -13,6 +13,7 @@ import java.text.SimpleDateFormat;
 class train {
 	LinkedList<String> time = new LinkedList<String>();
 	String arriveTime = null;
+	int[] diff = new int[30];
 	public boolean complete = false;
 	public boolean added = false;
 	train(String t){
@@ -28,9 +29,9 @@ class train {
 	
 	@Override
 	public String toString() {
-		String s = complete+"\t"+time.size()+"\t";
-		for(String i:time) {
-			s+=i+" ";
+		String s = complete+"\t"+time.size()+"\t"+arriveTime+"\t";
+		for(int i:diff) {
+			s+=i+"\t";
 		}
 		return s;
 	}
@@ -42,7 +43,34 @@ class train {
 			nt.add(it.next());
 		}
 		time = nt;
+		arriveTime = time.getFirst();
+		it = time.iterator();
+		for(int i = 0;i<30 ;i++){
+			diff[i] = (((int)DHStation.timeDifference(it.next(), arriveTime))/60);
+		}
 	}
+	
+	private boolean timeBig(int houra, int minutea,int hourb,int minuteb) {
+		return (houra*60+minutea-hourb*60-minuteb)>=0;
+	}
+	
+	public boolean testValid(Date a,Date b) {
+		SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmm");
+		Date at;
+		try {
+			at = format.parse(arriveTime);
+			return timeBig(at.getHours(),at.getMinutes(),a.getHours(),a.getMinutes())&&timeBig(b.getHours(),b.getMinutes(),at.getHours(),at.getMinutes());
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return false;
+	}
+	
+	public int getDiffIndex(int i) {
+		return diff[i];
+	}
+	
 	
 }
 public class DHStation {
@@ -256,7 +284,7 @@ public class DHStation {
 		
 	}
 	
-	private long timeDifference(String t1,String t2) {
+	public static long timeDifference(String t1,String t2) {
 		try {
 			return (format.parse(t1).getTime()-format.parse(t2).getTime())/1000;
 		} catch (ParseException e) {
@@ -301,8 +329,12 @@ public class DHStation {
 			s += i+" ";
 		}
 		s+="]";
-		s+="\n";
+		s+="\nAller:\n";
 		for(train i:trainAller) {
+			s+=i+"\n";
+		}
+		s+="\nRetour:\n";
+		for(train i:trainRetour) {
 			s+=i+"\n";
 		}
 		return s;
@@ -340,5 +372,70 @@ public class DHStation {
 			i.prune();
 		for(train i:trainRetour)
 			i.prune();
+		
+		
+		
+		
+	}
+
+
+	public String AverageDelay(String s, String e,String AR) {
+		SimpleDateFormat formatLocal = new SimpleDateFormat("HHmm");
+		Date start=null,end=null;
+		if(s != null && e != null) {
+			try {
+				start =  formatLocal.parse(s);
+				end = formatLocal.parse(e);
+			}catch(Exception ee) {
+				System.err.println(ee);
+			}
+		}
+		
+		int[] ret = new int[30];
+		int count = 0;
+		if(AR=="A"||AR=="*") {
+			Iterator<train> it = trainAller.iterator();
+			for(int i = 0;i<trainAller.size();i++) {
+				train t= it.next();
+				if(start!=null) {
+					if(!t.testValid(start, end)) {
+						continue;
+					}
+				}
+				for(int j = 0;j<30;j++) {
+					ret[j]+= t.getDiffIndex(j);
+				}
+				count++;
+			}
+		}
+		
+		if(AR=="R"||AR=="*") {
+			Iterator<train> it = trainRetour.iterator();
+			for(int i = 0;i<trainRetour.size();i++) {
+				train t= it.next();
+				if(start!=null) {
+					if(!t.testValid(start, end)) {
+						continue;
+					}
+				}
+				for(int j = 0;j<30;j++) {
+					ret[j]+= t.getDiffIndex(j);
+				}
+				count++;
+			}
+		}
+		
+		s = "";
+		for(int i:ret) {
+			if(count!=0)
+				s+=String.format("%.1f", (float)i/count)+"\t";
+			else {
+				if(i!=0) {
+					System.err.println("err");
+				}
+				s+=0+" ";
+			}
+		}
+		return s;
 	}
 }

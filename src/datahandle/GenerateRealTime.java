@@ -52,5 +52,6 @@ public class GenerateRealTime {
 		 dhs.printPassTrain();
 		 dhs.prune();
 		 dhs.print();
+		 dhs.printAverageDelay("1947","2006", "A");
 	 }
 }

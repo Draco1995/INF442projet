@@ -39,4 +39,13 @@ public class DHStations {
 		}  
 	}
 	
+	public void printAverageDelay(String start,String end,String AR) {
+		for (HashMap.Entry<String, DHStation> entry : map.entrySet()) {  
+			  
+		    System.out.println(entry.getKey() + ":" + entry.getValue().AverageDelay(start,end,AR));  
+		  
+		}  
+	}
+	
+	
 }
