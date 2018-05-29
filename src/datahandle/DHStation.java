@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Queue;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-
+/*
 class train {
 	LinkedList<String> time = new LinkedList<String>();
 	String arriveTime = null;
@@ -72,18 +72,18 @@ class train {
 	}
 	
 	
-}
+}*/
 public class DHStation {
 	private static SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmm");
 	private final String name;
-	List<String> arriveTime1 = new LinkedList<String>();
-	List<String> arriveTime2 = new LinkedList<String>();
-	private String time1,time2;
-	private String actualTime=null;
+	List<String> arriveTime1 = new LinkedList<String>();//所有的aller的车的经过时间
+	List<String> arriveTime2 = new LinkedList<String>();//所有retour的车的经过时间
+	private String time1,time2;//time1 临时用的
+	private String actualTime=null;//临时用的，表示处理数据条时候的时间
 	
 	
-	List<train> trainAller = new LinkedList<train>();
-	List<train> trainRetour = new LinkedList<train>();
+	List<train> trainAller = new LinkedList<train>();//一个list保管所有处理过程中创建过得车，可能pass过也可能没pass过
+	List<train> trainRetour = new LinkedList<train>();//
 	int numOfAller = 0;
 	int numOfRetour = 0;
 	LinkedList<train> qa = new LinkedList<train>();
@@ -290,7 +290,7 @@ public class DHStation {
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			return 100000;
+			return 1000000000;
 		}
 	}
 	/*
@@ -403,7 +403,9 @@ public class DHStation {
 					}
 				}
 				for(int j = 0;j<30;j++) {
-					ret[j]+= t.getDiffIndex(j);
+					
+					//ret[j]+= t.getDiffIndex(j);
+					ret[j]+= t.getDiffIndex(j)*t.getDiffIndex(j);
 				}
 				count++;
 			}
@@ -419,7 +421,8 @@ public class DHStation {
 					}
 				}
 				for(int j = 0;j<30;j++) {
-					ret[j]+= t.getDiffIndex(j);
+					//ret[j]+= t.getDiffIndex(j);
+					ret[j]+= t.getDiffIndex(j)*t.getDiffIndex(j);
 				}
 				count++;
 			}
@@ -437,5 +440,16 @@ public class DHStation {
 			}
 		}
 		return s;
+	}
+
+
+	public void addTrain(Kmean km) {
+		// TODO Auto-generated method stub
+		for(train i:trainAller) {
+			km.addRecord(i);
+		}
+		for(train i:trainRetour) {
+			km.addRecord(i);
+		}
 	}
 }

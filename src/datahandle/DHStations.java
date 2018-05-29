@@ -46,6 +46,14 @@ public class DHStations {
 		  
 		}  
 	}
+	public void addTrain(Kmean km) {
+		// TODO Auto-generated method stub
+		for (HashMap.Entry<String, DHStation> entry : map.entrySet()) {  
+			  
+		    entry.getValue().addTrain(km);
+		  
+		} 
+	}
 	
 	
 }

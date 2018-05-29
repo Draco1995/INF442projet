@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.List;
 
 public class GenerateRealTime {
 	static DHStations dhs = new DHStations();
@@ -47,11 +48,36 @@ public class GenerateRealTime {
 		 
 	 }
 	 public static void main(String[] args) {
-		 readFileByLines("LineInfoRBFinal.txt");
+		 readFileByLines("LineInfoRB");
+		 readFileByLines("LineInfoRB1");
+		 readFileByLines("LineInfoRB2");
+		 readFileByLines("LineInfoRB3");
+		 readFileByLines("LineInfoRB4");
 		 dhs.print();
 		 dhs.printPassTrain();
 		 dhs.prune();
 		 dhs.print();
-		 dhs.printAverageDelay("1947","2006", "A");
+		 dhs.printAverageDelay(null,null, "*");
+		 Kmean km = new Kmean();
+		 dhs.addTrain(km);
+		 km.setK(3);
+		 List<List<train>> re = km.clustering();
+		 for(List<train> i : re) {
+			 for(train j:i) {
+				 System.out.print(j.arriveTime+":");
+				 for(int k = 0;k<30;k++) {
+					 System.out.print(j.diff[k]+"\t");
+				 }
+				 System.out.println();
+			 }
+			 System.out.println();
+		 }
+		 
+		 for(List<train> i : re) {
+			 for(train j:i) {
+				 System.out.print(j.arriveTime+"\t");
+			 }
+			 System.out.println();
+		 }
 	 }
 }
