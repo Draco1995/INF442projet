@@ -7,7 +7,7 @@ public abstract class KMeansClustering <T>{
     private List<T> dataArray;//待分类的原始值  
     private int K = 3;//将要分成的类别个数  
     private int maxClusterTimes = 500;//最大迭代次数  
-    private List<List<T>> clusterList;//聚类的结果  
+    public List<List<T>> clusterList;//聚类的结果  
     private List<T> clusteringCenterT;//质心  
       
     public int getK() {  

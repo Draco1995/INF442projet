@@ -53,11 +53,22 @@ public class GenerateRealTime {
 		 readFileByLines("LineInfoRB2");
 		 readFileByLines("LineInfoRB3");
 		 readFileByLines("LineInfoRB4");
-		 dhs.print();
-		 dhs.printPassTrain();
+	//	 dhs.print();
+	//	 dhs.printPassTrain();
 		 dhs.prune();
-		 dhs.print();
-		 dhs.printAverageDelay(null,null, "*");
+	//	 dhs.print();
+	//	 dhs.printAverageDelay(null,null, "*");
+		 
+		 
+		 
+		 for(int k=7;k<=7;k++) {
+			 Kmean km = new Kmean();
+			 dhs.addTrain(km);
+			 km.setK(k);
+			 System.out.println(km.toMinute(km.clustering()));
+			 
+		 }
+		 /*
 		 Kmean km = new Kmean();
 		 dhs.addTrain(km);
 		 km.setK(6);
@@ -78,6 +89,6 @@ public class GenerateRealTime {
 				 System.out.print(j.arriveTime+"\t");
 			 }
 			 System.out.println();
-		 }
+		 }*/
 	 }
 }

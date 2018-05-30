@@ -67,5 +67,17 @@ public class train {
 		return diff[i];
 	}
 	
+	public int toMinutes() {
+		SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmm");
+		try {
+			Date at = format.parse(arriveTime);
+			return at.getHours()*60+at.getMinutes();
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return 0;
+		}
+	}
+	
 	
 }
