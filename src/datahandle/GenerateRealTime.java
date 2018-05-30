@@ -60,7 +60,7 @@ public class GenerateRealTime {
 		 dhs.printAverageDelay(null,null, "*");
 		 Kmean km = new Kmean();
 		 dhs.addTrain(km);
-		 km.setK(3);
+		 km.setK(6);
 		 List<List<train>> re = km.clustering();
 		 for(List<train> i : re) {
 			 for(train j:i) {

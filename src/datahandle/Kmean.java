@@ -9,9 +9,9 @@ public class Kmean extends KMeansClustering<train>{
 		// TODO Auto-generated method stub
 		double sum = 0;
 		for(int i = 0;i<30;i++) {
-			sum += Math.sqrt(o1.diff[i]*o1.diff[i]-o2.diff[i]*o2.diff[i]);
+			sum += Math.sqrt(Math.abs(o1.diff[i]*o1.diff[i]-o2.diff[i]*o2.diff[i]));
 		}
-		return sum;
+		return 1/sum;
 	}
 
 	@Override
@@ -36,10 +36,8 @@ public class Kmean extends KMeansClustering<train>{
 				t.diff[j]+=i.diff[j];
 			}
 		}
-		for(train i:list) {
-			for(int j = 0;j<30;j++) {
-				t.diff[j]/=list.size();
-			}
+		for(int j = 0;j<30;j++) {
+			t.diff[j]/=list.size();
 		}
 		return t;
 	}
