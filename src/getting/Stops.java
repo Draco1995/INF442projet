@@ -32,7 +32,7 @@ public class Stops {
 		 * @param linename
 		 * @param direction A/R/*
 		 * OutputFormat:LineInfo 
-		 * I forgot the order of output of nextTime, maybe it starts with direction='A'?
+		 *
 		 * StationName +'\t' +TimeRightNow+'\t' +numberOfMissions+'\t'+aLotOfNextTimeSeperateBy'\t'.. +
 		 * ","+aLotOfStationMessageSeperatetedBy'\t'
 		 * 

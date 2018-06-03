@@ -58,7 +58,7 @@ public class train {
 			return timeBig(at.getHours(),at.getMinutes(),a.getHours(),a.getMinutes())&&timeBig(b.getHours(),b.getMinutes(),at.getHours(),at.getMinutes());
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+		//	e.printStackTrace();
 		}
 		return false;
 	}

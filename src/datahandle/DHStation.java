@@ -289,7 +289,7 @@ public class DHStation {
 			return (format.parse(t1).getTime()-format.parse(t2).getTime())/1000;
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+		//	e.printStackTrace();
 			return 1000000000;
 		}
 	}
